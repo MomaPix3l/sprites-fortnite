@@ -26,6 +26,7 @@ Static personal tracker for Fortnite Sprites, including Base, Gold, Gummy, Galax
 
 ## Local testing
 
+
 Open:
 
 ```text
