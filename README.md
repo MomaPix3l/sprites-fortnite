@@ -4,6 +4,7 @@ Static personal tracker for Fortnite Sprites, including Base, Gold, Gummy, Galax
 
 ## What is included
 
+
 - Static website ready for GitLab Pages.
 - Pink / purple / blue / teal UI.
 - Editable acquired status.
