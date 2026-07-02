@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fortnite Sprite Tracker</title>
+  <meta name="description" content="Personal Fortnite Sprite collection tracker with levels, Holofoil and Gem variants, custom future sprite entries, and JSON backup." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__glow hero__glow--pink"></div>
+    <div class="hero__glow hero__glow--teal"></div>
+    <div class="hero-copy">
+      <p class="eyebrow">GitLab Pages ready • Personal collection tracker</p>
+      <h1>Fortnite Sprite Tracker</h1>
+      <p class="sub">Track every Sprite you own, update levels, filter by variant, add new Sprites when Epic releases more, and keep a JSON backup.</p>
+      <div class="hero-actions">
+        <button id="showMissingBtn" class="chip-btn" type="button">Show missing</button>
+        <button id="showNeedsBtn" class="chip-btn" type="button">Needs leveling</button>
+        <button id="showAllBtn" class="chip-btn" type="button">Show all</button>
+        <button id="addSpriteOpenBtn" class="chip-btn chip-btn--primary" type="button">+ Add future Sprite</button>
+      </div>
+    </div>
+    <div class="hero-card" aria-label="Collection summary">
+      <div class="stat"><span id="acquiredCount">0</span><small>Acquired</small></div>
+      <div class="stat"><span id="maxedCount">0</span><small>Lvl 5</small></div>
+      <div class="stat"><span id="missingCount">0</span><small>Missing</small></div>
+      <div class="stat"><span id="totalLevel">0</span><small>Total Lvls</small></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="progress-panel">
+      <div class="progress-copy">
+        <strong id="progressTitle">0 acquired</strong>
+        <span id="progressText">Level progress: 0%</span>
+      </div>
+      <div class="progress-bar" aria-label="Total level progress"><span id="progressFill"></span></div>
+      <div id="variantSummary" class="variant-summary"></div>
+    </section>
+
+    <section class="toolbar" aria-label="Tracker tools">
+      <div class="search-wrap">
+        <label for="search">Search</label>
+        <input id="search" type="search" placeholder="Water, Gem, Holofoil, Zero Point..." />
+      </div>
+      <div class="select-wrap">
+        <label for="filter">Status</label>
+        <select id="filter">
+          <option value="all">All sprites</option>
+          <option value="acquired">Acquired only</option>
+          <option value="missing">Missing only</option>
+          <option value="maxed">Level 5 only</option>
+          <option value="notmaxed">Needs leveling</option>
+          <option value="custom">Custom / future only</option>
+        </select>
+      </div>
+      <div class="select-wrap">
+        <label for="variant">Variant</label>
+        <select id="variant">
+          <option value="all">All variants</option>
+          <option value="Base">Base</option>
+          <option value="Gold">Gold</option>
+          <option value="Gummy">Gummy</option>
+          <option value="Galaxy">Galaxy</option>
+          <option value="Holofoil">Holofoil</option>
+          <option value="Gem">Gem</option>
+          <option value="Custom">Custom</option>
+        </select>
+      </div>
+      <div class="select-wrap">
+        <label for="rarity">Rarity</label>
+        <select id="rarity">
+          <option value="all">All rarities</option>
+          <option value="RARE">Rare</option>
+          <option value="EPIC">Epic</option>
+          <option value="LEGENDARY">Legendary</option>
+          <option value="MYTHIC">Mythic</option>
+          <option value="SPECIAL">Special</option>
+          <option value="UNKNOWN">Unknown</option>
+        </select>
+      </div>
+      <button id="exportBtn" class="btn" type="button">Export JSON</button>
+      <label class="btn import-btn" for="importFile">Import JSON</label>
+      <input id="importFile" type="file" accept="application/json" hidden />
+      <button id="resetBtn" class="btn danger" type="button">Reset</button>
+    </section>
+
+    <section class="notice-panel">
+      <strong>Holofoil + Gem included.</strong>
+      <span>Those cards use Fandom image links when available and fall back to local base art if the remote image fails. Custom entries are stored in your browser and included in exports.</span>
+    </section>
+
+    <section id="grid" class="grid" aria-live="polite"></section>
+  </main>
+
+  <template id="cardTemplate">
+    <article class="sprite-card">
+      <div class="card-top">
+        <span class="number"></span>
+        <span class="rarity"></span>
+      </div>
+      <div class="image-wrap">
+        <img class="sprite-img" loading="lazy" alt="" />
+        <span class="missing-overlay">Missing</span>
+        <span class="remote-badge" title="Uses a remote Fandom image with local fallback">Fandom</span>
+      </div>
+      <div class="card-body">
+        <h2></h2>
+        <div class="tags">
+          <span class="variant-tag"></span>
+          <span class="base-tag"></span>
+        </div>
+        <div class="controls">
+          <label class="check"><input class="acquired" type="checkbox" /> Acquired</label>
+          <label class="level-label">Level
+            <select class="level">
+              <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+            </select>
+          </label>
+        </div>
+        <div class="level-row">
+          <button class="mini minus" type="button">−</button>
+          <span class="level-pill">Lvl 0</span>
+          <button class="mini plus" type="button">+</button>
+        </div>
+        <details class="edit-details">
+          <summary>Edit image / notes</summary>
+          <label>Image URL
+            <input class="image-url" type="url" placeholder="https://..." />
+          </label>
+          <label>Notes
+            <textarea class="notes" rows="2" placeholder="Where you found it, who helped, etc."></textarea>
+          </label>
+          <button class="mini clear-img" type="button">Use default image</button>
+          <button class="mini delete-custom" type="button">Delete custom</button>
+        </details>
+      </div>
+    </article>
+  </template>
+
+  <dialog id="addDialog" class="dialog">
+    <form id="addSpriteForm" method="dialog">
+      <div class="dialog-head">
+        <h2>Add future Sprite</h2>
+        <button class="icon-btn" value="cancel" type="submit" aria-label="Close">×</button>
+      </div>
+      <div class="form-grid">
+        <label>Name
+          <input name="name" required placeholder="Holofoil New Sprite" />
+        </label>
+        <label>Base name
+          <input name="baseName" required placeholder="New Sprite" />
+        </label>
+        <label>Variant
+          <select name="variantFamily">
+            <option>Base</option><option>Gold</option><option>Gummy</option><option>Galaxy</option><option>Holofoil</option><option>Gem</option><option selected>Custom</option>
+          </select>
+        </label>
+        <label>Rarity
+          <select name="rarity">
+            <option>UNKNOWN</option><option>RARE</option><option>EPIC</option><option>LEGENDARY</option><option>MYTHIC</option><option>SPECIAL</option>
+          </select>
+        </label>
+        <label>Level
+          <select name="level"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select>
+        </label>
+        <label class="checkbox-line"><input name="acquired" type="checkbox" /> Acquired</label>
+        <label class="wide">Image URL
+          <input name="image" type="url" placeholder="https://... or assets/my-sprite.png" />
+        </label>
+        <label class="wide">Notes
+          <textarea name="notes" rows="3" placeholder="Optional"></textarea>
+        </label>
+      </div>
+      <div class="dialog-actions">
+        <button class="btn" value="cancel" type="submit">Cancel</button>
+        <button class="btn btn-primary" id="saveCustomBtn" value="default" type="submit">Add Sprite</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
