@@ -2,6 +2,13 @@ const STORAGE_KEY = "fortnite-sprite-tracker-v5-professional";
 const MAP_STORAGE_KEY = "fortnite-sprite-tracker-map-pins-v2";
 
 const $ = (id) => document.getElementById(id);
+const onAny = (ids, eventName, handler) => {
+  for (const id of ids) {
+    const el = $(id);
+    if (el) { el.addEventListener(eventName, handler); return el; }
+  }
+  return null;
+};
 const clampLevel = (v) => Math.max(0, Math.min(5, Number(v) || 0));
 const pct = (n, d) => d ? Math.round((n / d) * 100) : 0;
 const escapeHtml = (str) => String(str || "").replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));
@@ -300,19 +307,19 @@ function initMapPage(){
     e.target.value = "";
   }
 
-  $("addPinModeBtn").addEventListener("click", () => setAddMode(!addingPin));
-  $("clearPinFormBtn").addEventListener("click", clearPinForm);
-  $("savePinBtn").addEventListener("click", savePinFromForm);
-  $("deletePinBtn").addEventListener("click", deleteSelectedPin);
-  $("exportMapBtn").addEventListener("click", exportMapPins);
-  $("importMapFile").addEventListener("change", importMapPinsFile);
-  $("resetMapBtn").addEventListener("click", () => { if(confirm("Delete every map pin?")){ mapPins = []; saveMapPins(); clearPinForm(); renderMapPins(); } });
-  $("mapZoom").addEventListener("input", e => setMapZoom(e.target.value));
-  $("zoomOutBtn").addEventListener("click", () => setMapZoom(mapZoomValue - .2));
-  $("zoomInBtn").addEventListener("click", () => setMapZoom(mapZoomValue + .2));
-  $("toggleLabelsBtn").addEventListener("click", () => { showMapLabels = !showMapLabels; renderMapPins(); });
+  onAny(["addPinModeBtn"], "click", () => setAddMode(!addingPin));
+  onAny(["clearPinFormBtn", "clearPinBtn"], "click", clearPinForm);
+  onAny(["savePinBtn"], "click", savePinFromForm);
+  onAny(["deletePinBtn"], "click", deleteSelectedPin);
+  onAny(["exportMapBtn", "exportPinsBtn"], "click", exportMapPins);
+  onAny(["importMapFile", "importPinsFile"], "change", importMapPinsFile);
+  onAny(["resetMapBtn"], "click", () => { if(confirm("Delete every map pin?")){ mapPins = []; saveMapPins(); clearPinForm(); renderMapPins(); } });
+  onAny(["mapZoom"], "input", e => setMapZoom(e.target.value));
+  onAny(["zoomOutBtn"], "click", () => setMapZoom(mapZoomValue - .2));
+  onAny(["zoomInBtn"], "click", () => setMapZoom(mapZoomValue + .2));
+  onAny(["toggleLabelsBtn"], "click", () => { showMapLabels = !showMapLabels; renderMapPins(); });
   mapStage.addEventListener("click", placePinFromClick);
-  $("pinCloseup").addEventListener("change", async e => {
+  onAny(["pinCloseup"], "change", async e => {
     const file = e.target.files[0]; if(!file) return;
     pendingCloseupData = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
     setCloseupPreview(pendingCloseupData);
