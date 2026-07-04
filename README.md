@@ -1,14 +1,5 @@
-# Fortnite Sprite Tracker
+# Fortnite Sprite Tracker v9
 
-GitHub Pages static website.
+GitHub Pages static site. Main tracker plus separate event location map.
 
-## Files
-- `index.html` — Sprite collection tracker
-- `map.html` — Event location map manager
-- `data.js` — packaged Sprite data
-- `app.js` — tracker/map logic
-- `styles.css` — interface styling
-- `assets/` — Sprite images and map assets
-
-## GitHub Pages
-Use Settings → Pages → Deploy from branch → main → / root.
+Files must stay at repository root: index.html, map.html, app.js, data.js, styles.css, and assets/.
