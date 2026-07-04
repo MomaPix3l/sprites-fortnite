@@ -1,4 +1,4 @@
-const DEFAULT_SPRITES = [
+window.DEFAULT_SPRITES = [
   {
     "id": 1,
     "name": "Water Sprite",
