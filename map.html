@@ -4,114 +4,151 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#08091a" />
-  <title>Fortnite Sprite Chest Map</title>
+  <title>Fortnite Location Map</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <header class="hero map-hero">
-    <div class="hero-copy">
-      <p class="eyebrow">Interactive location tracker</p>
-      <h1>Sprite Chest Map</h1>
-      <p class="sub">Add Sprite chest and gold fishing locations as you find them. Click the map, save the pin, and attach notes or a close-up screenshot.</p>
-      <div class="hero-actions">
-        <a class="chip-btn nav-chip" href="index.html">Back to Sprite Tracker</a>
-        <button id="addPinModeBtn" class="chip-btn" type="button">Add pin by clicking map</button>
-        <button id="toggleLabelsBtn" class="chip-btn" type="button">Hide labels</button>
-      </div>
+<body class="map-page">
+  <header class="map-topbar">
+    <div>
+      <p class="eyebrow">Interactive Fortnite location tracker</p>
+      <h1>Event Location Map</h1>
+      <p class="sub compact-sub">Track Sprite chests, gold fishing holes, regular fishing holes, and future event items. Each season map keeps its own pins.</p>
     </div>
-    <div class="hero-card map-card" aria-label="Map summary">
-      <div class="stat"><span id="pinCount">0</span><small>Total pins</small></div>
-      <div class="stat"><span id="bestPinCount">0</span><small>Best spots</small></div>
+    <div class="map-top-actions">
+      <a class="chip-btn nav-chip" href="index.html">Back to Sprite Tracker</a>
+      <button id="addPinModeBtn" class="chip-btn" type="button">Add pin by clicking map</button>
+      <button id="toggleLabelsBtn" class="chip-btn" type="button">Hide labels</button>
     </div>
   </header>
 
-  <main>
-    <section class="map-panel">
-      <div class="map-head">
-        <div>
-          <h2>Current Season Map</h2>
-          <p>Use this page as your personal discovery board. Pins save in your browser and can be backed up with JSON export.</p>
-        </div>
-      </div>
-
-      <div class="map-toolbar">
-        <button id="exportPinsBtn" class="btn" type="button">Export map JSON</button>
-        <label class="btn import-btn" for="importPinsFile">Import map JSON</label>
-        <input id="importPinsFile" type="file" accept="application/json" hidden />
-        <button id="resetMapBtn" class="btn danger" type="button">Delete all pins</button>
+  <main class="map-main-shell">
+    <section class="map-workspace">
+      <div class="map-control-strip">
+        <label class="season-select-label">Season map
+          <select id="seasonSelect"></select>
+        </label>
+        <button id="newSeasonBtn" class="btn" type="button">Add season map</button>
+        <label class="btn import-btn" for="seasonImageFile">Upload map image</label>
+        <input id="seasonImageFile" type="file" accept="image/*" hidden />
+        <button id="deleteSeasonBtn" class="btn danger" type="button">Delete season</button>
         <span id="addModeLabel" class="map-mode-label">Click “Add pin” first</span>
       </div>
 
-      <div class="map-layout">
-        <div class="map-view-wrap">
-          <div class="map-zoom-row">
+      <div class="map-filter-strip">
+        <div id="typeFilters" class="type-filters" aria-label="Type filters"></div>
+        <label>Quality
+          <select id="qualityFilter">
+            <option value="all">All</option>
+            <option value="Best">Best</option>
+            <option value="Good">Good</option>
+            <option value="Test">Test</option>
+            <option value="Removed">Removed</option>
+          </select>
+        </label>
+        <label>Status
+          <select id="confirmedFilter">
+            <option value="all">All</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="unconfirmed">Unconfirmed</option>
+          </select>
+        </label>
+        <button id="showAllMapBtn" class="btn subtle-btn" type="button">Show all</button>
+      </div>
+
+      <div class="map-layout compact-map-layout">
+        <div class="map-view-wrap compact-map-wrap">
+          <div class="map-zoom-row compact-zoom-row">
             <button id="zoomOutBtn" class="mini-btn" type="button">−</button>
             <input id="mapZoom" type="range" min="1" max="3" step="0.1" value="1" aria-label="Map zoom" />
             <button id="zoomInBtn" class="mini-btn" type="button">+</button>
+            <button id="fitMapBtn" class="mini-btn" type="button">Fit</button>
+            <span class="map-counts"><strong id="pinCount">0</strong> pins • <strong id="bestPinCount">0</strong> best</span>
           </div>
-          <div id="mapScroll" class="map-scroll">
+          <div id="mapScroll" class="map-scroll compact-map-scroll">
             <div id="mapStage" class="map-stage">
               <img id="seasonMap" src="assets/current-season-map.png" alt="Current Fortnite season map" />
               <div id="pinLayer" class="pin-layer" aria-label="Map pins"></div>
             </div>
           </div>
-          <p class="map-help">Tip: use zoom for precision. You can also edit X/Y percentages manually.</p>
+          <div class="map-legend" id="mapLegend"></div>
         </div>
 
-        <aside class="pin-editor">
-          <h3 id="pinFormTitle">Add / Edit Map Pin</h3>
-          <input id="editingPinId" type="hidden" />
-          <div class="form-grid">
-            <label>Chest name
-              <input id="pinName" type="text" value="Sprite" />
-            </label>
-            <label>Type
-              <select id="pinType">
-                <option>Sprite chest</option>
-                <option>Gold fishing spot</option>
-              </select>
-            </label>
-            <label>Area / POI
-              <input id="pinArea" type="text" placeholder="Heatwave Harbor, Sunken Shores..." />
-            </label>
+        <aside class="pin-editor compact-editor">
+          <div class="editor-tabs">
+            <button id="pinTabBtn" class="tab-btn active" type="button">Pin</button>
+            <button id="typeTabBtn" class="tab-btn" type="button">Types</button>
           </div>
-          <div class="form-grid two">
-            <label>Quality
-              <select id="pinQuality">
-                <option>Best</option>
-                <option>Good</option>
-                <option>Test</option>
-                <option>Removed</option>
-              </select>
+
+          <section id="pinEditorPanel">
+            <h3 id="pinFormTitle">Add / Edit Pin</h3>
+            <input id="editingPinId" type="hidden" />
+            <div class="form-grid">
+              <label>Name
+                <input id="pinName" type="text" value="Sprite" />
+              </label>
+              <label>Type
+                <select id="pinType"></select>
+              </label>
+              <label>Area / POI
+                <input id="pinArea" type="text" placeholder="Heatwave Harbor, Sunken Shores..." />
+              </label>
+            </div>
+            <div class="form-grid two">
+              <label>Quality
+                <select id="pinQuality">
+                  <option>Best</option>
+                  <option>Good</option>
+                  <option>Test</option>
+                  <option>Removed</option>
+                </select>
+              </label>
+              <label>X %
+                <input id="pinX" type="number" min="0" max="100" step="0.01" />
+              </label>
+              <label>Y %
+                <input id="pinY" type="number" min="0" max="100" step="0.01" />
+              </label>
+              <label class="form-check"><input id="pinConfirmed" type="checkbox" /> Confirmed</label>
+            </div>
+            <label>Notes / Sprite or item found
+              <textarea id="pinNotes" rows="3" placeholder="Example: Gold Punk, Gummy Fire, route details..."></textarea>
             </label>
-            <label>Color
-              <select id="pinColor">
-                <option value="blue">Blue</option>
-                <option value="pink">Pink</option>
-                <option value="purple">Purple</option>
-                <option value="teal">Teal</option>
-                <option value="gray">Gray</option>
-              </select>
+            <label>Close-up screenshot
+              <input id="pinCloseup" type="file" accept="image/*" />
             </label>
-            <label>X %
-              <input id="pinX" type="number" min="0" max="100" step="0.01" />
-            </label>
-            <label>Y %
-              <input id="pinY" type="number" min="0" max="100" step="0.01" />
-            </label>
-            <label class="form-check"><input id="pinConfirmed" type="checkbox" /> Confirmed</label>
-          </div>
-          <label>Notes / Sprite found
-            <textarea id="pinNotes" rows="4" placeholder="Example: Gummy Fire, Gold Punk, route details..."></textarea>
-          </label>
-          <label>Close-up screenshot
-            <input id="pinCloseup" type="file" accept="image/*" />
-          </label>
-          <div id="closeupPreview" class="closeup-preview"><span>No close-up yet. Auto-crop will be created from the map when you save.</span></div>
-          <div class="pin-actions">
-            <button id="savePinBtn" class="btn map-primary" type="button">Save pin</button>
-            <button id="deletePinBtn" class="btn danger" type="button">Delete</button>
-            <button id="clearPinBtn" class="btn" type="button">Clear form</button>
+            <div id="closeupPreview" class="closeup-preview compact-preview"><span>No close-up yet. Auto-crop will be created from the map when you save.</span></div>
+            <div class="pin-actions">
+              <button id="savePinBtn" class="btn map-primary" type="button">Save pin</button>
+              <button id="deletePinBtn" class="btn danger" type="button">Delete</button>
+              <button id="clearPinBtn" class="btn" type="button">Clear</button>
+            </div>
+          </section>
+
+          <section id="typeEditorPanel" hidden>
+            <h3>Location Types</h3>
+            <p class="small-muted">Built-in types are protected. Add custom types for future events.</p>
+            <div id="typeList" class="type-list"></div>
+            <div class="type-form">
+              <label>Type name
+                <input id="newTypeName" type="text" placeholder="Example: Event Vault, Boss Drop..." />
+              </label>
+              <label>Pin color
+                <input id="newTypeColor" type="color" value="#16f0d0" />
+              </label>
+              <label>Icon image
+                <input id="newTypeIcon" type="file" accept="image/*" />
+              </label>
+              <label class="form-check"><input id="newTypeVisible" type="checkbox" checked /> Visible by default</label>
+              <button id="addTypeBtn" class="btn map-primary" type="button">Add custom type</button>
+            </div>
+          </section>
+
+          <hr class="soft-rule" />
+          <div class="map-data-actions">
+            <button id="exportPinsBtn" class="btn" type="button">Export map JSON</button>
+            <label class="btn import-btn" for="importPinsFile">Import map JSON</label>
+            <input id="importPinsFile" type="file" accept="application/json" hidden />
+            <button id="resetMapBtn" class="btn danger" type="button">Delete all pins</button>
           </div>
         </aside>
       </div>

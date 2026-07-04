@@ -1,30 +1,51 @@
 # Fortnite Sprite Tracker
 
-A static GitHub Pages site for tracking Fortnite Sprite collection progress and personal map locations.
+Static GitHub Pages website for tracking Fortnite Sprites and personal map locations.
 
-## Files
+## Pages
 
-- `index.html` — Sprite collection tracker
-- `map.html` — Interactive chest / gold fishing spot map
-- `styles.css` — Pink, purple, blue, teal interface styling
-- `app.js` — Tracker and map logic
-- `data.js` — Default Sprite data from the latest backup
-- `assets/` — Sprite images and current season map
+- `index.html` — Sprite collection tracker.
+- `map.html` — Interactive map tracker.
 
-## Deploy on GitHub Pages
+## Map tracker features
 
-Use repository root as the publishing source:
+- Separate pins per season map.
+- Add new season maps by uploading a map image.
+- Built-in location types:
+  - Sprite Chest — chest icon
+  - Gold Fishing Hole — gold target icon
+  - Regular Fishing Hole — blue target icon
+- Custom location types for future Fortnite events.
+- Show/hide filters by type, quality, and confirmed status.
+- Upload a close-up screenshot per pin or use the automatic map crop.
+- Export/import map JSON backups.
 
-1. Go to **Settings → Pages**
-2. Set **Source** to **Deploy from a branch**
-3. Set **Branch** to `main`
-4. Set **Folder** to `/ (root)`
-5. Save
+## GitHub Pages setup
 
-Your published URL should be:
+Use repository root as the publish source:
 
-`https://YOUR-USERNAME.github.io/YOUR-REPOSITORY/`
+Settings → Pages → Deploy from a branch → main → / root
 
-## Backup
+Expected repo structure:
 
-Use **Export JSON** before making major changes. The site stores changes in browser local storage, so exporting JSON is your portable backup.
+```text
+assets/
+index.html
+map.html
+styles.css
+app.js
+data.js
+README.md
+```
+
+## Future updates
+
+After replacing files locally:
+
+```powershell
+git add .
+git commit -m "Update Fortnite Sprite Tracker"
+git push origin main
+```
+
+Then wait for GitHub Pages deployment and hard-refresh the site with Ctrl+F5.
