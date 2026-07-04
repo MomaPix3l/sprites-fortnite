@@ -1,116 +1,20 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#08091a" />
-  <title>Fortnite Sprite Tracker</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <header class="hero">
-    <div class="hero-copy">
-      <p class="eyebrow">Personal collection database</p>
-      <h1>Fortnite Sprite Tracker</h1>
-      <p class="sub">A clean collection dashboard for tracking every Sprite, variant, level, and missing slot. Built for quick updates while you play.</p>
-      <div class="hero-actions">
-        <a class="chip-btn nav-chip" href="map.html">Open Chest Map</a>
-        <button id="showMissingBtn" class="chip-btn" type="button">Missing</button>
-        <button id="showNeedsBtn" class="chip-btn" type="button">Needs leveling</button>
-        <button id="showAllBtn" class="chip-btn" type="button">Show all</button>
-      </div>
-    </div>
-    <div class="hero-card" aria-label="Collection summary">
-      <div class="stat"><span id="acquiredCount">0</span><small>Acquired</small></div>
-      <div class="stat"><span id="maxedCount">0</span><small>Lvl 5</small></div>
-      <div class="stat"><span id="missingCount">0</span><small>Missing</small></div>
-      <div class="stat"><span id="totalLevel">0</span><small>Total Lvls</small></div>
-    </div>
-  </header>
-
-  <main>
-    <section class="progress-panel">
-      <div class="progress-copy">
-        <strong id="progressTitle">0 acquired</strong>
-        <span id="progressText">Level progress: 0%</span>
-      </div>
-      <div class="progress-bar" aria-label="Total level progress"><span id="progressFill"></span></div>
-      <div id="variantSummary" class="variant-summary"></div>
-    </section>
-
-    <section class="toolbar" aria-label="Tracker tools">
-      <div class="search-wrap">
-        <label for="search">Search</label>
-        <input id="search" type="search" placeholder="Water, Burnt Peanut, Holofoil, Gem..." />
-      </div>
-      <div class="select-wrap">
-        <label for="filter">Status</label>
-        <select id="filter">
-          <option value="all">All sprites</option>
-          <option value="acquired">Acquired only</option>
-          <option value="missing">Missing only</option>
-          <option value="maxed">Level 5 only</option>
-          <option value="notmaxed">Needs leveling</option>
-        </select>
-      </div>
-      <div class="select-wrap">
-        <label for="variant">Variant</label>
-        <select id="variant">
-          <option value="all">All variants</option>
-          <option value="Base">Base</option>
-          <option value="Gold">Gold</option>
-          <option value="Gummy">Gummy</option>
-          <option value="Galaxy">Galaxy</option>
-          <option value="Holofoil">Holofoil</option>
-          <option value="Gem">Gem</option>
-        </select>
-      </div>
-      <div class="select-wrap">
-        <label for="rarity">Rarity</label>
-        <select id="rarity">
-          <option value="all">All rarities</option>
-          <option value="RARE">Rare</option>
-          <option value="EPIC">Epic</option>
-          <option value="LEGENDARY">Legendary</option>
-          <option value="MYTHIC">Mythic</option>
-          <option value="SPECIAL">Special</option>
-        </select>
-      </div>
-      <button id="exportBtn" class="btn" type="button">Export JSON</button>
-      <label class="btn import-btn" for="importFile">Import JSON</label>
-      <input id="importFile" type="file" accept="application/json" hidden />
-      <button id="resetBtn" class="btn danger" type="button">Reset</button>
-    </section>
-
-    <section class="hint-panel map-link-panel">
-      <strong>Map tracker:</strong> Chest and gold fishing locations are managed separately. <a href="map.html">Open the interactive map</a>.
-    </section>
-
-    <section id="grid" class="sprite-grid" aria-live="polite"></section>
-  </main>
-
-  <template id="cardTemplate">
-    <article class="sprite-card">
-      <div class="card-top"><span class="number"></span><span class="rarity"></span></div>
-      <div class="image-wrap"><img class="sprite-img" alt="" loading="lazy" /></div>
-      <h2></h2>
-      <div class="tags"><span class="variant-tag"></span><span class="base-tag"></span></div>
-      <div class="controls">
-        <label class="check"><input class="acquired" type="checkbox" /> Acquired</label>
-        <label>Level
-          <select class="level"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>
-        </label>
-      </div>
-      <div class="quick-levels" aria-label="Quick level buttons">
-        <button class="minus" type="button" aria-label="Decrease level">−</button>
-        <span class="level-pill">Lvl 0</span>
-        <button class="plus" type="button" aria-label="Increase level">+</button>
-      </div>
-      <textarea class="notes" rows="2" placeholder="Notes: where found, route, duplicate count..."></textarea>
-    </article>
-  </template>
-
-  <script src="data.js"></script>
-  <script src="app.js"></script>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fortnite Sprite Tracker</title><link rel="stylesheet" href="styles.css"></head>
+<body data-page="tracker"><main class="page">
+  <section class="hero">
+    <div class="hero-main"><div class="eyebrow">Personal Collection Database</div><h1>Fortnite Sprite Tracker</h1><p>Track every Sprite, variant, level, missing slot, and notes while you play.</p><div class="button-row"><a class="btn secondary" href="map.html">Open Location Map</a><button id="showMissingBtn" class="btn">Missing</button><button id="showNeedsBtn" class="btn">Needs leveling</button><button id="showAllBtn" class="btn">Show all</button></div></div>
+    <div class="stats-card"><div class="stat"><span id="acquiredCount">0</span><small>Acquired</small></div><div class="stat"><span id="maxedCount">0</span><small>Lvl 5</small></div><div class="stat"><span id="missingCount">0</span><small>Missing</small></div><div class="stat"><span id="totalLevel">0</span><small>Total Lvls</small></div></div>
+  </section>
+  <section class="panel progress-panel"><div class="progress-top"><span id="progressTitle">Loading sprites...</span><span id="progressText">Level progress: 0%</span></div><div class="bar"><div id="progressFill" class="fill"></div></div><div id="variantSummary" class="chips"></div><div id="debugStatus" class="debug"></div></section>
+  <section class="panel toolbar">
+    <div class="field"><label>Search</label><input id="search" placeholder="Water, Burnt Peanut, Holofoil, Gem..."></div>
+    <div class="field"><label>Status</label><select id="filter"><option value="all">All sprites</option><option value="acquired">Acquired</option><option value="missing">Missing</option><option value="maxed">Level 5</option><option value="notmaxed">Needs leveling</option></select></div>
+    <div class="field"><label>Variant</label><select id="variant"><option value="all">All variants</option><option>Base</option><option>Gold</option><option>Gummy</option><option>Galaxy</option><option>Holofoil</option><option>Gem</option></select></div>
+    <div class="field"><label>Rarity</label><select id="rarity"><option value="all">All rarities</option><option>RARE</option><option>EPIC</option><option>LEGENDARY</option><option>MYTHIC</option><option>SPECIAL</option></select></div>
+    <button id="exportBtn" class="btn">Export JSON</button><label class="btn" for="importFile">Import JSON</label><input id="importFile" type="file" accept="application/json" hidden><button id="resetBtn" class="btn danger">Reset</button>
+  </section>
+  <section class="panel" style="margin-top:16px"><strong style="color:var(--teal)">Map tracker:</strong> chest, fishing hole, and future event locations are managed separately. <a href="map.html">Open the interactive map.</a></section>
+  <section id="grid" class="grid"></section>
+</main>
+<template id="cardTemplate"><article class="sprite-card"><div class="num"></div><div class="rarity"></div><div class="sprite-imgbox"><img class="sprite-img" alt=""></div><h2></h2><div class="tags"><span class="tag variant-tag"></span><span class="tag base-tag"></span></div><div class="row"><label><input type="checkbox" class="acquired"> Acquired</label><select class="level"><option value="0">Lvl 0</option><option value="1">Lvl 1</option><option value="2">Lvl 2</option><option value="3">Lvl 3</option><option value="4">Lvl 4</option><option value="5">Lvl 5</option></select></div><div class="quick"><button class="mini minus" type="button">−</button><span class="level-pill">Lvl 0</span><button class="mini plus" type="button">+</button></div><textarea class="notes" rows="2" placeholder="Notes: where found, route, duplicate count..."></textarea></article></template>
+<script src="data.js"></script><script src="app.js"></script></body></html>
